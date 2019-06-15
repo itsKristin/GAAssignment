@@ -13,8 +13,16 @@ public class SpaceshipMotionUI : MonoBehaviour
     public InputField Width;
     public InputField Height;
 
+    public InputField ThrustVectorX;
+    public InputField ThrustVectorY;
+    public InputField ThrustVectorZ;
+
+    public InputField Mass;
+
     public Button RunSimulation;
     public Button PlaceThruster;
+
+    public Toggle Gravity;
 
     public Bootstrap Bootstrapper;
     public ThrusterPlacement Thrusterplacement;
@@ -64,17 +72,67 @@ public class SpaceshipMotionUI : MonoBehaviour
             
         });
 
+        ThrustVectorX.contentType = InputField.ContentType.DecimalNumber;
+        ThrustVectorX.onValueChanged.AddListener(delegate
+        {
+            float potentialValue = (ThrustVectorX.text == null || ThrustVectorX.text == string.Empty) ? 0f : float.Parse(ThrustVectorX.text);
+        
+            Bootstrapper.ThrustVector = new float3
+            {
+                x = potentialValue,
+                y = Bootstrapper.ThrustVector.y,
+                z = Bootstrapper.ThrustVector.z
+            };
+        });
+
+        ThrustVectorY.contentType = InputField.ContentType.DecimalNumber;
+        ThrustVectorY.onValueChanged.AddListener(delegate
+        {
+            float potentialValue = (ThrustVectorY.text == null || ThrustVectorY.text == string.Empty) ? 0f : float.Parse(ThrustVectorY.text);
+        
+            Bootstrapper.ThrustVector = new float3
+            {
+                x = Bootstrapper.ThrustVector.x,
+                y = potentialValue,
+                z = Bootstrapper.ThrustVector.z
+            };
+        });
+
+        ThrustVectorZ.contentType = InputField.ContentType.DecimalNumber;
+        ThrustVectorZ.onValueChanged.AddListener(delegate
+        {
+            float potentialValue = (ThrustVectorZ.text == null || ThrustVectorZ.text == string.Empty) ? 0f : float.Parse(ThrustVectorZ.text);
+        
+            Bootstrapper.ThrustVector = new float3
+            {
+                x = Bootstrapper.ThrustVector.x,
+                y = Bootstrapper.ThrustVector.y,
+                z = potentialValue
+            };
+        });
+
+        Mass.contentType = InputField.ContentType.DecimalNumber;
+        Mass.onValueChanged.AddListener(delegate
+        {
+            Bootstrapper.SpaceshipMass = (Mass.text == null || Mass.text == string.Empty) ? 0f : float.Parse(Mass.text);
+        });
+
         RunSimulation.onClick.AddListener(() => 
         {
             Bootstrapper.RunSimulation();
             SettingsUI.SetActive(false);
-            //SimulationUI.SetActive(true);
+            Camera.main.fieldOfView = 113f;
         });
 
 
         PlaceThruster.onClick.AddListener(() => 
         {
             Thrusterplacement.PlaceThruster = true;
+        });
+
+        Gravity.onValueChanged.AddListener(delegate
+        {
+            Bootstrapper.Gravity = Gravity.isOn;
         });
 
     }
