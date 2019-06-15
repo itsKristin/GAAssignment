@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [Serializable]
-public struct ThrusterComponent : IComponentData
+public struct AngularVelocity : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -19,8 +19,7 @@ public struct ThrusterComponent : IComponentData
     // * You should focus on the data structure that makes the most sense
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
-    public float3 ThrustVector;
-    public float3 ThrusterPosition;
+    public float3 Value;
 
 
 }
