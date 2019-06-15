@@ -15,8 +15,17 @@ public class ThrusterPlacement : MonoBehaviour
 
     private void Update()
     {
-        if(placeThruster && placedThrusters.Count == 0)
+        if(placeThruster)
         {
+            if(placedThrusters.Count != 0)
+            {
+                foreach(var thrust in placedThrusters)
+                {
+                    DestroyImmediate(thrust);
+                }
+                placedThrusters.Clear();
+            }
+
             if(!ThrusterMarker.activeSelf)
             {
                 ThrusterMarker.SetActive(true);

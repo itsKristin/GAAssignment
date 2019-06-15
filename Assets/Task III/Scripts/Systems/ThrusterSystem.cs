@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 using static Unity.Mathematics.math;
 
 public class ThrusterSystem : JobComponentSystem
@@ -22,18 +23,22 @@ public class ThrusterSystem : JobComponentSystem
         // Add fields here that your job needs to do its work.
         // For example,
         public float deltaTime;
-        
-        
-        
-        public void Execute(ref ThrusterComponent _thrusterComponent, ref Velocity _velocity, [ReadOnly] ref CustomRigidbody _customRigidbody, ref AngularVelocity _angularVelocity)
+        public bool keyDown;
+
+
+
+        public void Execute(ref ThrusterComponent _thrusterComponent, ref Velocity _velocity, ref CustomRigidbody _customRigidbody, ref AngularVelocity _angularVelocity)
         {
-            //Angular Force
-            float3 acceleration = _thrusterComponent.ThrustVector / _customRigidbody.MassValue;
-            _velocity.Value += acceleration * deltaTime;
 
-            float3 torque = math.dot(_thrusterComponent.ThrusterPosition - new float3(0f, 0f, 0f), _thrusterComponent.ThrustVector);
-            _angularVelocity.Value += torque;
+            if(keyDown)
+            {
+                _customRigidbody.Momentum += _thrusterComponent.ThrustVector * deltaTime;
+                _velocity.Value = _customRigidbody.Momentum / _customRigidbody.MassValue;
 
+                float3 offset = _customRigidbody.CenterOfMass - _thrusterComponent.ThrusterPosition;
+                float3 torque = math.cross(_thrusterComponent.ThrustVector, offset);
+                _customRigidbody.AngularMomentum += torque * deltaTime;
+            }   
         }
     }
     
@@ -42,7 +47,8 @@ public class ThrusterSystem : JobComponentSystem
         var job = new ThrusterSystemJob();
         
         job.deltaTime = UnityEngine.Time.deltaTime;
-         
+        job.keyDown = Input.GetKey(KeyCode.Space);
+
         return job.Schedule(this, inputDependencies);
     }
 }

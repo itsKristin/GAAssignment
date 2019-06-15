@@ -27,18 +27,10 @@ public class RotationSystem : JobComponentSystem
         
         public void Execute(ref Rotation _rotation,[ReadOnly] ref AngularVelocity _angularVelocity, [ReadOnly] ref CustomRigidbody _customRigidbody)
         {
-            // Implement the work to perform for each entity here.
-            // You should only access data that is local or that is a
-            // field on this job. Note that the 'rotation' parameter is
-            // marked as [ReadOnly], which means it cannot be modified,
-            // but allows this job to run in parallel with other jobs
-            // that want to read Rotation component data.
-            // For example,
-            //Quaternion quaternionFromAnglularVelo = new Quaternion(_angularVelocity.Value.x, _angularVelocity.Value.y, _angularVelocity.Value.z,0f);
-            //Quaternion newQuaternion = Quaternion.Multiply(Quaternion.Multiply((Quaternion.Multiply(quaternionFromAnglularVelo, new Quaternion(_rotation.Value.value.x,_rotation.Value.value.y,_rotation.Value.value.z,_rotation.Value.value.w))) , deltaTime / 2f),2f);
-            // _rotation.Value = new quaternion(newQuaternion.X, newQuaternion.Y, newQuaternion.Z, newQuaternion.W);
-            //_rotation.Value = math.mul(math.normalize(_rotation.Value), quaternion.AxisAngle(math.up(),  _angularVelocity.Value.x * deltaTime));
-            
+            float3 inverseInertia = new float3(1f / _customRigidbody.MomentOfInertia.x, 1f / _customRigidbody.MomentOfInertia.y, 1f / _customRigidbody.MomentOfInertia.z);
+            _angularVelocity.Value = Vector3.Scale(_customRigidbody.AngularMomentum, inverseInertia);
+            _rotation.Value = math.mul(_rotation.Value,quaternion.Euler(_angularVelocity.Value * deltaTime));
+
 
         }   
     }

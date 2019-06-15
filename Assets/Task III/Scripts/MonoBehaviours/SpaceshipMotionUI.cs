@@ -6,8 +6,8 @@ using Unity.Mathematics;
 
 public class SpaceshipMotionUI : MonoBehaviour
 {
-    public GameObject SettingsUI;
-    public GameObject SimulationUI;
+    public GameObject DeactivationPanel;
+    public GameObject SimulationPanel;
 
     public InputField Length;
     public InputField Width;
@@ -21,6 +21,7 @@ public class SpaceshipMotionUI : MonoBehaviour
 
     public Button RunSimulation;
     public Button PlaceThruster;
+    public Button Reset;
 
     public Toggle Gravity;
 
@@ -120,8 +121,15 @@ public class SpaceshipMotionUI : MonoBehaviour
         RunSimulation.onClick.AddListener(() => 
         {
             Bootstrapper.RunSimulation();
-            SettingsUI.SetActive(false);
-            Camera.main.fieldOfView = 113f;
+            DeactivationPanel.SetActive(false);
+            SimulationPanel.SetActive(true);
+        });
+
+        Reset.onClick.AddListener(() =>
+        {
+            Bootstrapper.Reset();
+            DeactivationPanel.SetActive(true);
+            SimulationPanel.SetActive(false);
         });
 
 

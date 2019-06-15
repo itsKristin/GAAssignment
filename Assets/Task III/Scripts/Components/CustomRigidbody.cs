@@ -21,7 +21,10 @@ public struct CustomRigidbody : IComponentData
     //   authoring the data in the Editor.
     public float MassValue;
     public float3 CenterOfMass;
-    public float3x3 MomentOfInertia;
+    public float3 MomentOfInertia;
+    public float3 Momentum;
+    public float3 AngularMomentum;
+
 
 
 }

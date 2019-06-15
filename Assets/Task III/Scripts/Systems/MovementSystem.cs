@@ -26,7 +26,7 @@ public class MovementSystem : JobComponentSystem
         
         
         public void Execute(ref Translation _translation, [ReadOnly] ref CustomRigidbody _customrigidbody, ref Velocity _velocity)
-        {   
+        {
             _translation.Value += _velocity.Value * deltaTime;
                
         }
