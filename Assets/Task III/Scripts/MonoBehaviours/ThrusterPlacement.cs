@@ -7,6 +7,7 @@ public class ThrusterPlacement : MonoBehaviour
     private bool placeThruster;
 
     public GameObject ThrusterMarker;
+    public Bootstrap Bootstrapper;
     public bool PlaceThruster { get { return placeThruster; } set { placeThruster = value; } }
     private List<GameObject> placedThrusters = new List<GameObject>();
 
@@ -30,7 +31,11 @@ public class ThrusterPlacement : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
-                placedThrusters.Add(Instantiate(ThrusterMarker, ThrusterMarker.transform.position, Quaternion.identity));
+                GameObject thrusterGO = Instantiate(ThrusterMarker, ThrusterMarker.transform.position, Quaternion.identity);
+                placedThrusters.Add(thrusterGO);
+                thrusterGO.transform.SetParent(Bootstrapper.SpaceshipPrefab.transform);
+                Bootstrapper.ThrusterPosition = thrusterGO.transform.position;
+                Bootstrapper.Trusterplaced = true;
                 placeThruster = false;
             }
         }
