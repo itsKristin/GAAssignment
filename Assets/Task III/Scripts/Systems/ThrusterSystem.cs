@@ -33,7 +33,7 @@ public class ThrusterSystem : JobComponentSystem
             if(keyDown)
             {
                 _customRigidbody.Momentum += _thrusterComponent.ThrustVector * deltaTime;
-                _velocity.Value = _customRigidbody.Momentum / _customRigidbody.MassValue;
+                _velocity.Value += _customRigidbody.Momentum / _customRigidbody.MassValue;
 
                 float3 offset = _customRigidbody.CenterOfMass - _thrusterComponent.ThrusterPosition;
                 float3 torque = math.cross(_thrusterComponent.ThrustVector, offset);
