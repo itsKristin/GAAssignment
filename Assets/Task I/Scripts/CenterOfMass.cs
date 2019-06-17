@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class CenterOfMass : MonoBehaviour
 {
-    public UICoM ui;
+    public UICoM UI;
     public List<MeshOption> Prefabs = new List<MeshOption>();
     public GameObject marker;
 
@@ -50,16 +49,20 @@ public class CenterOfMass : MonoBehaviour
 
         vertices = selectedPrefab.mesh.vertices;
 
+        //Looping through submeshes to make sure the center of mass is correct even if there are submeshes.
         for (int submeshIndex = 0; submeshIndex < selectedPrefab.mesh.subMeshCount; submeshIndex++)
         {
+            //Getting triangles for the current submesh
             triangleIndices = selectedPrefab.mesh.GetTriangles(submeshIndex);
 
+            //Looping through the triangle vertex indices in steps of three (per triangle)
             for (int i = 0; i < triangleIndices.Length; i+=3)
             {
                 trianglePointA = triangleIndices[i];
                 trianglePointB = triangleIndices[i + 1];
                 trianglePointC = triangleIndices[i + 2];
 
+                //Calculating the faces of the tetrahedron
                 float CBA = vertices[trianglePointC].x * vertices[trianglePointB].y * vertices[trianglePointA].z;
                 float BCA = vertices[trianglePointB].x * vertices[trianglePointC].y * vertices[trianglePointA].z;
                 float CAB = vertices[trianglePointC].x * vertices[trianglePointA].y * vertices[trianglePointB].z;
@@ -68,22 +71,29 @@ public class CenterOfMass : MonoBehaviour
                 float ABC = vertices[trianglePointA].x * vertices[trianglePointB].y * vertices[trianglePointC].z;
 
 
-                float triangleVolume = (-CBA + BCA + CAB - ACB - BAC +  ABC) * 1f/ 6f;
-                totalVolume += triangleVolume;
+                //Combining all of our faces by following the right hand rule and multiplying the result by 1 over 6
+                //https://en.wikipedia.org/wiki/Tetrahedron
+                float tetrahedronVolume = (-CBA + BCA + CAB - ACB - BAC +  ABC) * 1f/ 6f;
 
-                centerOfMass.x += ((vertices[trianglePointA].x + vertices[trianglePointB].x + vertices[trianglePointC].x) / 4f) * triangleVolume;
-                centerOfMass.y += ((vertices[trianglePointA].y + vertices[trianglePointB].y + vertices[trianglePointC].y) / 4f) * triangleVolume;
-                centerOfMass.z += ((vertices[trianglePointA].z + vertices[trianglePointB].z + vertices[trianglePointC].z) / 4f) * triangleVolume;
+                //Adding the tetrahedron volume to our total volume
+                totalVolume += tetrahedronVolume;
+
+                //Adding the average per coordinate times the tetrahedrons volume to our center of mass to ultimately give us the sum of all centers of mass. 
+                //Dividing by four because I am assuming the fourth point of tetrahedron is at (0,0,0).
+                centerOfMass.x += ((vertices[trianglePointA].x + vertices[trianglePointB].x + vertices[trianglePointC].x) / 4f) * tetrahedronVolume;
+                centerOfMass.y += ((vertices[trianglePointA].y + vertices[trianglePointB].y + vertices[trianglePointC].y) / 4f) * tetrahedronVolume;
+                centerOfMass.z += ((vertices[trianglePointA].z + vertices[trianglePointB].z + vertices[trianglePointC].z) / 4f) * tetrahedronVolume;
             }
         }
 
+        //Dividing the center of mass by the total volume to give us the average center of mass of all the tetrahedrons, which is the meshes center of mass.
         centerOfMass /= totalVolume;
+
+        //using transform.Transformpoint to make sure that we are in world space and not local space. 
         calculatedCenterOfMass = selectedPrefab.Prefab.transform.TransformPoint(centerOfMass);
         marker.transform.position = calculatedCenterOfMass;
-        ui.Refresh();
+        UI.Refresh();
     }
-
-
 }
 
 [System.Serializable]
