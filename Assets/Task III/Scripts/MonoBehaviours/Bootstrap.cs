@@ -66,8 +66,8 @@ public class Bootstrap : MonoBehaviour
             entityManager.AddComponentData(spaceshipEntity, new ThrusterComponent
             {
                 ThrustVector = thrustVector,
-                ThrusterPosition = thrusterPosition    
-            });
+                ThrusterPosition = spaceshipPrefab.transform.GetChild(0).InverseTransformPoint(thrusterPosition)
+        });
         }
     }
 
