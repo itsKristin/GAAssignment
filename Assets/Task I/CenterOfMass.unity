@@ -1727,7 +1727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56dd4f46424b5748bdcef4564c857eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ui: {fileID: 1667524959}
+  UI: {fileID: 1667524959}
   Prefabs:
   - Name: Cone
     mesh: {fileID: 3613567641014311022, guid: 76042c9d9e118ca49acc38a2f1e81135, type: 3}
