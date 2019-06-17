@@ -4,22 +4,23 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using Unity.Transforms;
 
 public class ThrusterSystem : JobComponentSystem
 {
     [BurstCompile]
-    struct ThrusterSystemJob : IJobForEach<ThrusterComponent,Velocity, CustomRigidbody, AngularVelocity>
+    struct ThrusterSystemJob : IJobForEach<ThrusterComponent,Velocity, CustomRigidbody, AngularVelocity, Rotation>
     {
         public float deltaTime;
         public bool keyDown;
 
-        public void Execute(ref ThrusterComponent _thrusterComponent, ref Velocity _velocity, ref CustomRigidbody _customRigidbody, ref AngularVelocity _angularVelocity)
+        public void Execute(ref ThrusterComponent _thrusterComponent, ref Velocity _velocity, ref CustomRigidbody _customRigidbody, ref AngularVelocity _angularVelocity, ref Rotation _rotation)
         {
             //If space bar is pressed
             if(keyDown)
             {
                 //adding thrust vector times deltatime to the momentum
-                _customRigidbody.Momentum += _thrusterComponent.ThrustVector * deltaTime;
+                _customRigidbody.Momentum += math.mul(_rotation.Value,_thrusterComponent.ThrustVector) * deltaTime;
                 //adding momentum divided by the mass to our linear velocity
                 _velocity.Value += _customRigidbody.Momentum / _customRigidbody.MassValue;
 

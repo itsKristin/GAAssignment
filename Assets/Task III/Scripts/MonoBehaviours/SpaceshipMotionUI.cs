@@ -30,6 +30,7 @@ public class SpaceshipMotionUI : MonoBehaviour
 
     private void Awake()
     {
+        Length.text = Bootstrapper.SpaceshipDimensions.x.ToString();
         Length.contentType = InputField.ContentType.DecimalNumber;
         Length.onValueChanged.AddListener(delegate
         {
@@ -44,6 +45,7 @@ public class SpaceshipMotionUI : MonoBehaviour
             Bootstrapper.Refresh();
         });
 
+        Width.text = Bootstrapper.SpaceshipDimensions.y.ToString();
         Width.contentType = InputField.ContentType.DecimalNumber;
         Width.onValueChanged.AddListener(delegate
         {
@@ -58,6 +60,7 @@ public class SpaceshipMotionUI : MonoBehaviour
             Bootstrapper.Refresh();
         });
 
+        Height.text = Bootstrapper.SpaceshipDimensions.z.ToString();
         Height.contentType = InputField.ContentType.DecimalNumber;
         Height.onValueChanged.AddListener(delegate
         {
@@ -73,6 +76,7 @@ public class SpaceshipMotionUI : MonoBehaviour
             
         });
 
+        ThrustVectorX.text = Bootstrapper.ThrustVector.x.ToString();
         ThrustVectorX.contentType = InputField.ContentType.DecimalNumber;
         ThrustVectorX.onValueChanged.AddListener(delegate
         {
@@ -86,6 +90,7 @@ public class SpaceshipMotionUI : MonoBehaviour
             };
         });
 
+        ThrustVectorY.text = Bootstrapper.ThrustVector.y.ToString();
         ThrustVectorY.contentType = InputField.ContentType.DecimalNumber;
         ThrustVectorY.onValueChanged.AddListener(delegate
         {
@@ -99,6 +104,7 @@ public class SpaceshipMotionUI : MonoBehaviour
             };
         });
 
+        ThrustVectorZ.text = Bootstrapper.ThrustVector.z.ToString();
         ThrustVectorZ.contentType = InputField.ContentType.DecimalNumber;
         ThrustVectorZ.onValueChanged.AddListener(delegate
         {
@@ -112,6 +118,7 @@ public class SpaceshipMotionUI : MonoBehaviour
             };
         });
 
+        Mass.text = Bootstrapper.SpaceshipMass.ToString();
         Mass.contentType = InputField.ContentType.DecimalNumber;
         Mass.onValueChanged.AddListener(delegate
         {

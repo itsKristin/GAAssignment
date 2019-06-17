@@ -7,7 +7,7 @@ public class Bootstrap : MonoBehaviour
     public Material spaceshipMaterial;
 
     private float3 spaceshipDimensions = new float3(1f,1f,1f);
-    private float3 thrustVector;
+    private float3 thrustVector = new float3(0f,0f,1f);
     private float3 thrusterPosition;
     private float spaceshipMass = 1f;
     private bool gravity;
@@ -66,7 +66,7 @@ public class Bootstrap : MonoBehaviour
             entityManager.AddComponentData(spaceshipEntity, new ThrusterComponent
             {
                 ThrustVector = thrustVector,
-                ThrusterPosition = spaceshipPrefab.transform.GetChild(0).InverseTransformPoint(thrusterPosition)
+                ThrusterPosition = thrusterPosition
         });
         }
     }
